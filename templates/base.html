@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Notes{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('index') if current_user.is_authenticated else url_for('login') }}" class="nav-brand">Notes</a>
+            <div class="nav-spacer"></div>
+            {% if current_user.is_authenticated %}
+                <span class="nav-user">{{ current_user.username }}</span>
+                <form action="{{ url_for('logout') }}" method="post" class="nav-logout-form">
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-ghost btn-sm">Log in</a>
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Register</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container">
+        {% if get_flashed_messages() %}
+        <div class="flashes">
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <main class="main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Delete — {{ note.title }}{% endblock %}
+{% block content %}
+<h1>Delete note</h1>
+<div class="danger-card">
+    Are you sure you want to delete <strong>"{{ note.title }}"</strong>?
+    This action cannot be undone.
+</div>
+<div class="form-actions">
+    <form method="post">
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
+    </form>
+    <a href="{{ url_for('view_note', note_id=note.id) }}" class="btn btn-ghost">Cancel</a>
+</div>
+{% endblock %}

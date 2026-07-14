@@ -1,0 +1,322 @@
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --border: #e2e0d8;
+  --text: #1c1c1e;
+  --text-muted: #6b6b70;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --success-bg: #f0fdf4;
+  --success-border: #86efac;
+  --error-bg: #fef2f2;
+  --error-border: #fca5a5;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,.13), 0 1px 3px rgba(0,0,0,.10);
+  --shadow-md: 0 6px 20px rgba(0,0,0,.14), 0 2px 6px rgba(0,0,0,.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  /* Unsplash — white watercolor paper texture by Mika Baumeister
+     https://unsplash.com/photos/vS3idIiYxX0  (free to use) */
+  background-color: #c9bfb0;
+  background-image:
+    linear-gradient(rgba(180, 155, 110, 0.28), rgba(180, 155, 110, 0.28)),
+    url("https://images.unsplash.com/photo-1601662528567-526cd06f6582?auto=format&fit=crop&w=1920&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Layout ── */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ── Nav ── */
+.nav {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.nav-brand:hover { text-decoration: none; color: var(--accent); }
+
+.nav-spacer { flex: 1; }
+
+.nav-user {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ── Flash messages ── */
+.flashes { margin: 1.25rem 0 0; }
+
+.flash {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+.flash.success { background: var(--success-bg); border-color: var(--success-border); color: #166534; }
+.flash.error   { background: var(--error-bg);   border-color: var(--error-border);   color: #991b1b; }
+
+/* ── Page main area ── */
+.main { padding: 2rem 0 3rem; }
+
+/* ── Headings ── */
+h1, h2, h3 { margin: 0 0 1rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.4rem; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.btn:hover { text-decoration: none; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-hover); color: #fff; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--bg); color: var(--text); }
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover { background: var(--danger-hover); color: #fff; }
+
+.btn-sm {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.82rem;
+}
+
+/* ── Forms ── */
+.form-group { margin-bottom: 1.25rem; }
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  outline: none;
+}
+input:hover, textarea:hover { background: rgba(255,255,255,0.85); }
+input:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+}
+
+textarea { resize: vertical; min-height: 220px; line-height: 1.65; }
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* ── Card ── */
+.card {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ── Note list ── */
+.note-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-direction: column; gap: 0.6rem; }
+
+.note-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.note-card:hover { box-shadow: var(--shadow-md); border-color: #c8c6bc; }
+
+.note-card-body { min-width: 0; }
+.note-card-title { font-weight: 600; font-size: 0.98rem; color: var(--text); }
+.note-card-title a { color: inherit; }
+.note-card-title a:hover { color: var(--accent); text-decoration: none; }
+.note-card-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+.note-card-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+
+/* ── Note view ── */
+.note-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.note-body {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  white-space: pre-wrap;
+  font-size: 0.97rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+.note-actions { display: flex; gap: 0.6rem; align-items: center; }
+.note-actions .sep { color: var(--border); }
+
+/* ── Page header row ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Auth card (login/register centered) ── */
+.auth-wrap {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  padding: 2rem 2.25rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-card h2 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+.auth-footer { margin-top: 1.25rem; font-size: 0.875rem; color: var(--text-muted); text-align: center; }
+
+/* ── Delete confirm ── */
+.danger-card {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #7f1d1d;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+.empty-state p { margin: 0.5rem 0 1.25rem; font-size: 0.95rem; }
+
+/* ── Logout button in nav (unstyled) ── */
+.nav-logout-form { margin: 0; }
+.btn-logout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  padding: 0;
+  font-family: inherit;
+}
+.btn-logout:hover { color: var(--danger); }
