@@ -1,8 +1,9 @@
 import base64
 import hashlib
+import os
 from datetime import datetime, timezone
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.types import TypeDecorator, Text
@@ -10,7 +11,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
-_ENCRYPTION_KEY = base64.urlsafe_b64encode(hashlib.sha256(b"password").digest())
+try:
+    _ENCRYPTION_PASSWORD = os.environ["NOTES_ENCRYPTION_PASSWORD"]
+except KeyError as exc:
+    raise RuntimeError(
+        "NOTES_ENCRYPTION_PASSWORD environment variable must be set "
+        "to encrypt/decrypt note content."
+    ) from exc
+
+_ENCRYPTION_KEY = base64.urlsafe_b64encode(hashlib.sha256(_ENCRYPTION_PASSWORD.encode()).digest())
 _fernet = Fernet(_ENCRYPTION_KEY)
 
 
@@ -28,7 +37,15 @@ class EncryptedText(TypeDecorator):
     def process_result_value(self, value, dialect):
         if value is None:
             return value
-        return _fernet.decrypt(value.encode()).decode()
+        try:
+            return _fernet.decrypt(value.encode()).decode()
+        except InvalidToken as exc:
+            raise ValueError(
+                "Could not decrypt note content — it may predate encryption "
+                "support, or NOTES_ENCRYPTION_PASSWORD doesn't match the key "
+                "it was encrypted with. Run scripts/migrate_encrypt_notes.py "
+                "to migrate pre-existing plaintext rows."
+            ) from exc
 
 
 def utcnow():

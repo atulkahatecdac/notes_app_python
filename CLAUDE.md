@@ -10,12 +10,16 @@ A small Flask + SQLite notes app with per-user auth. Full spec lives in [SPECS.M
 
 ```
 pip install -r requirements.txt
-python app.py
+NOTES_ENCRYPTION_PASSWORD=password python app.py
 ```
 
-Runs the Flask dev server (debug mode, no reloader) on the default port. There is no test suite, linter, or build step configured in this repo.
+`NOTES_ENCRYPTION_PASSWORD` is required — `models.py` derives the `Note.content` encryption key from it and fails fast at import time if it's unset. Runs the Flask dev server (debug mode, no reloader) on the default port.
 
-The SQLite DB (`instance/notes.db`) is created automatically via `db.create_all()` on app startup — there are no migrations (no Flask-Migrate/Alembic). Schema changes require either deleting `instance/notes.db` (dev only, destroys data) or hand-writing a migration.
+Run tests with `pytest` (repo root — `tests/conftest.py` sets a default `NOTES_ENCRYPTION_PASSWORD` for the test run and puts the repo root on `sys.path`).
+
+The SQLite DB (`instance/notes.db`) is created automatically via `db.create_all()` on app startup — there are no schema migrations (no Flask-Migrate/Alembic). Schema changes require either deleting `instance/notes.db` (dev only, destroys data) or hand-writing a migration.
+
+`Note.content` is encrypted at rest ([models.py](models.py)'s `EncryptedText` type, backed by Fernet). Any database with content written before encryption was added has plaintext rows — run `python scripts/migrate_encrypt_notes.py` (idempotent) before deploying encryption against such a database, or reads will raise a `ValueError` pointing at the script. This migration is one-way at the application level: rolling the code back after migrating does not restore plaintext, since old code has no decryption step and will display raw ciphertext instead of note content.
 
 ## Architecture
 

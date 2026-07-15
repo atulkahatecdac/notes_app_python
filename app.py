@@ -77,7 +77,12 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    notes = Note.query.filter_by(user_id=current_user.id).order_by(Note.created_at.desc()).all()
+    notes = (
+        db.session.query(Note.id, Note.title, Note.created_at)
+        .filter(Note.user_id == current_user.id)
+        .order_by(Note.created_at.desc())
+        .all()
+    )
     return render_template("index.html", notes=notes)
 
 
