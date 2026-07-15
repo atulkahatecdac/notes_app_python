@@ -1,10 +1,34 @@
+import base64
+import hashlib
 from datetime import datetime, timezone
 
+from cryptography.fernet import Fernet
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from sqlalchemy.types import TypeDecorator, Text
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+
+_ENCRYPTION_KEY = base64.urlsafe_b64encode(hashlib.sha256(b"password").digest())
+_fernet = Fernet(_ENCRYPTION_KEY)
+
+
+class EncryptedText(TypeDecorator):
+    """Text column that is transparently encrypted at rest."""
+
+    impl = Text
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        return _fernet.encrypt(value.encode()).decode()
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        return _fernet.decrypt(value.encode()).decode()
 
 
 def utcnow():
@@ -33,7 +57,7 @@ class Note(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(EncryptedText, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)
     updated_at = db.Column(db.DateTime(timezone=True), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
