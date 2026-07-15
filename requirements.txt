@@ -5,3 +5,4 @@ cryptography
 pytest
 playwright
 pytest-playwright
+ruff
