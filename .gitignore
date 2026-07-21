@@ -3,4 +3,6 @@ __pycache__/
 instance/
 .venv/
 venv/
-.claude/
+.claude/*
+!.claude/skills/
+!.claude/skills/**

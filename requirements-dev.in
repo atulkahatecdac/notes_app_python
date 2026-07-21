@@ -1,0 +1,12 @@
+-c requirements.txt
+
+pytest
+pytest-cov
+playwright
+pytest-playwright
+ruff
+mypy
+pip-audit
+detect-secrets
+pre-commit
+pip-tools
