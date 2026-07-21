@@ -103,3 +103,29 @@ def test_edited_note_reencrypts_and_reopens_correctly(page, live_server, registe
     page.goto(f"{live_server}/")
     page.goto(note_url)
     expect(page.locator(".note-body")).to_have_text(updated_content)
+
+
+def test_search_matches_title_and_content_but_not_other_notes(page, live_server, registered_user):
+    _login(page, live_server, registered_user)
+
+    page.goto(f"{live_server}/notes/new")
+    page.fill("#title", "Grocery List")
+    page.fill("#content", "Milk, eggs, bread.")
+    page.click("button.btn-primary")
+
+    page.goto(f"{live_server}/notes/new")
+    page.fill("#title", "Meeting Notes")
+    page.fill("#content", "Discuss the quarterly roadmap and budget.")
+    page.click("button.btn-primary")
+
+    # Search by a word only in the title of one note.
+    page.goto(f"{live_server}/?q=Grocery")
+    expect(page.locator(".note-card-title")).to_have_text(["Grocery List"])
+
+    # Search by a word only in the (encrypted) content of the other note.
+    page.goto(f"{live_server}/?q=roadmap")
+    expect(page.locator(".note-card-title")).to_have_text(["Meeting Notes"])
+
+    # A query matching neither note shows the no-results state, not an error.
+    page.goto(f"{live_server}/?q=nonexistent-term-xyz")
+    expect(page.locator(".empty-state")).to_contain_text("No notes match")

@@ -77,13 +77,25 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    notes = (
-        db.session.query(Note.id, Note.title, Note.created_at)
-        .filter(Note.user_id == current_user.id)
-        .order_by(Note.created_at.desc())
-        .all()
-    )
-    return render_template("index.html", notes=notes)
+    query = request.args.get("q", "").strip()
+    if query:
+        # Content is encrypted non-deterministically, so it can't be
+        # searched in SQL — fetch and decrypt, then filter in Python.
+        candidates = (
+            Note.query.filter(Note.user_id == current_user.id)
+            .order_by(Note.created_at.desc())
+            .all()
+        )
+        needle = query.lower()
+        notes = [n for n in candidates if needle in n.title.lower() or needle in n.content.lower()]
+    else:
+        notes = (
+            db.session.query(Note.id, Note.title, Note.created_at)
+            .filter(Note.user_id == current_user.id)
+            .order_by(Note.created_at.desc())
+            .all()
+        )
+    return render_template("index.html", notes=notes, query=query)
 
 
 @app.route("/notes/new", methods=["GET", "POST"])

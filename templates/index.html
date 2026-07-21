@@ -6,6 +6,14 @@
     <a href="{{ url_for('new_note') }}" class="btn btn-primary">+ New note</a>
 </div>
 
+<form method="get" class="search-bar">
+    <input type="search" name="q" placeholder="Search notes…" value="{{ query }}">
+    <button type="submit" class="btn btn-ghost">Search</button>
+    {% if query %}
+        <a href="{{ url_for('index') }}" class="btn btn-ghost">Clear</a>
+    {% endif %}
+</form>
+
 {% if notes %}
     <ul class="note-list">
     {% for note in notes %}
@@ -23,6 +31,10 @@
         </li>
     {% endfor %}
     </ul>
+{% elif query %}
+    <div class="empty-state">
+        <p>No notes match "{{ query }}".</p>
+    </div>
 {% else %}
     <div class="empty-state">
         <p>You haven't written any notes yet.</p>

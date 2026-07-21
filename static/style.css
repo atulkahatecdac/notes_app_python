@@ -163,6 +163,7 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="search"],
 textarea {
   display: block;
   width: 100%;
@@ -264,6 +265,15 @@ textarea { resize: vertical; min-height: 220px; line-height: 1.65; }
   justify-content: space-between;
   margin-bottom: 0.25rem;
 }
+
+/* ── Search bar ── */
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+}
+.search-bar input[type="search"] { flex: 1; }
 
 /* ── Auth card (login/register centered) ── */
 .auth-wrap {
